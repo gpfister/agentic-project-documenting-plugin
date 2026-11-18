@@ -16,12 +16,12 @@ This rule set applies whenever the `agentic-project-documenting-plugin` is activ
 ---
 
 ## 2. Autonomous Documentation Specialist (`@coding-document`)
-- **Authority & Permissions**: The `@coding-document` subagent is granted full permissions to:
-  - Read code, configs, transcripts, and git states (`read_file`, `list_dir`, `run_command`).
-  - Author and edit documentation notes and vault indexes (`write_file`, `edit_file`).
-  - Execute git inspection commands (`git status`, `git branch -a`, `git log`, `git diff`).
+- **Authority & Permissions**: The `@coding-document` subagent is granted permissions to:
+  - Read code, configs, transcripts, and git states (`read_file`, `list_dir`).
+  - Author and update Obsidian vault notes and session artifacts (`write_file` only; `edit_file` is prohibited).
+  - Execute read-only git inspection commands (`git status`, `git branch -a`, `git log`, `git diff`) and `scripts/sync_sessions.py` (`run_command`).
   - Communicate with caller subagents and users (`send_message`, `ask_question`).
-- **Safety Boundary**: `@coding-document` strictly modifies documentation files, Obsidian vault notes, and session archives. It must NEVER modify application source code, production configs, or test suites directly.
+- **Safety Boundary**: `@coding-document`'s `write_file` usage is restricted strictly to `*-obsidian/` vault notes (e.g., `agentic-obsidian/`) and session artifacts under `<appDataDir>/brain/<conversation-id>/*.md`. It must NEVER use `edit_file` or `write_file` to modify application source code, production configs, test suites, or repository-local documentation (`README.md`, `CONTRIBUTING.md`)—all repository file changes belong exclusively to `@coding-develop`. `run_command` must remain strictly non-mutating with respect to code repositories.
 
 ---
 
@@ -33,7 +33,7 @@ When `agentic-project-documenting-plugin` is active, other plugins coordinate wi
     - **After Phase 2 (Specify)**: Document and index approved `specification.md`.
     - **After Phase 3 (Plan)**: Document implementation plans, architecture diagrams, and formalize ADRs.
     - **After Phase 4 (Develop)**: Document code changes, implementation details, and test reports.
-    - **After Phase 5 (Review / Pre-Merge)**: Perform pre-merge documentation tidy-up across READMEs and specs.
+    - **After Phase 5 (Review / Pre-Merge)**: Perform pre-merge Obsidian vault documentation tidy-up across architecture records and feature specs in `*-obsidian/` (repo-local `README.md` updates are delegated to `@coding-develop`).
     - **After Phase 6 (Merge / Post-Merge)**: Update repository git statuses (`agentic-obsidian/git-status.md`), branch topologies, and release changelogs.
 - **`agentic-issue-investigation-plugin` (`@coding-investigate`)**:
   - Once the issue investigation is done, `@coding-investigate` invokes `@coding-document` to store the root cause analysis, evidence, and remediation assessment into `agentic-obsidian/investigations/`.

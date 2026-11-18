@@ -7,7 +7,7 @@ description: >-
 
 # Obsidian Vault Documentation & Knowledge Curation (`@coding-document`)
 
-The `coding-document` skill orchestrates documentation generation, synchronization, and archival into the workspace Obsidian vault (`agentic-obsidian/`). It is executed by the autonomous specialist agent **`@coding-document`**.
+The `coding-document` skill orchestrates documentation generation, synchronization, and archival into the workspace Obsidian vault (`*-obsidian/`, e.g., `agentic-obsidian/`). It is executed by the autonomous specialist agent **`@coding-document`**, using `write_file` restricted strictly to `*-obsidian/` vault documentation and session artifacts under `<appDataDir>/brain/<conversation-id>/*.md` (`edit_file` is not permitted, and repository-local file edits—including `README.md`, source code, configs, and tests—are delegated exclusively to `@coding-develop`).
 
 ---
 
@@ -35,7 +35,7 @@ The `coding-document` skill orchestrates documentation generation, synchronizati
 2. **After Phase 2 (Specify)**: Stores and indexes the approved `specification.md` into `agentic-obsidian/features/`.
 3. **After Phase 3 (Plan)**: Documents implementation plans, repository breakdowns, and formalizes ADRs under `agentic-obsidian/architecture/`.
 4. **After Phase 4 (Develop)**: Documents implementation notes, code modifications, and test execution reports.
-5. **After Phase 5 (Review / Pre-Merge)**: Performs pre-merge tidy-up across READMEs, architecture records, and feature notes.
+5. **After Phase 5 (Review / Pre-Merge)**: Performs pre-merge Obsidian vault tidy-up across architecture records and feature notes in `*-obsidian/` (repo-local `README.md` updates are delegated to `@coding-develop`).
 6. **After Phase 6 (Merge / Post-Merge)**: Updates repository git statuses (`agentic-obsidian/git-status.md`), branch topologies, and release changelogs.
 
 ### Workflow B: Archiving Multi-Agent Deliverables

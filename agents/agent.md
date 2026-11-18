@@ -33,7 +33,7 @@ agents/
 
 | Agent Handle | Directory | `enable_write_tools` | `enable_subagent_tools` | `enable_mcp_tools` | Allowed Tools | Description |
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
-| **`@coding-document`** | [`agents/coding-document/`](file:///Users/gpfister/Development/Projects/gpfister/agentic/agentic-project-documenting-plugin/agents/coding-document/) | `True` | `True` | `True` | `read_file`, `write_file`, `edit_file`, `list_dir`, `run_command`, `ask_question`, `send_message` | Autonomous documentation specialist documenting projects, features, architecture, sessions, artifacts, code changes, and git status in Obsidian vaults. |
+| **`@coding-document`** | [`agents/coding-document/`](file:///Users/gpfister/Development/Projects/gpfister/agentic/agentic-project-documenting-plugin/agents/coding-document/) | `True` | `True` | `True` | `read_file`, `write_file`, `list_dir`, `run_command`, `ask_question`, `send_message` | Autonomous documentation specialist documenting projects, features, architecture, sessions, artifacts, code changes, and git status in Obsidian vaults. |
 
 ---
 
