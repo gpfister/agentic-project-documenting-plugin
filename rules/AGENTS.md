@@ -41,6 +41,8 @@ When `agentic-project-documenting-plugin` is active, other plugins coordinate wi
   - Upon research report approval, `@coding-research` invokes `@coding-document` to record the research into `agentic-obsidian/research/`, creating a new topic/subject or updating an existing one.
 - **`agentic-task-monitoring-plugin` (`@coding-monitor`)**:
   - At the end of monitoring, `@coding-monitor` invokes `@coding-document` to record telemetry logs, error anomalies, and remediation actions in `agentic-obsidian/monitoring/`.
+- **`agentic-design-plugin` (`@coding-design`)**:
+  - Upon design specification approval, `@coding-design` invokes `@coding-document` to archive the approved `design-spec.md`, PenPot project/file/frame links, and design tokens into `agentic-obsidian/designs/<design-slug>.md` and update `agentic-obsidian/designs/index.md`.
 - **`agentic-prompt-triage-plugin`**:
   - If `agentic-project-documenting-plugin` is installed, dynamic triage classifies documentation requests and routes them directly to `@coding-document`.
 

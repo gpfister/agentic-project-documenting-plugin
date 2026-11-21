@@ -112,9 +112,10 @@ def test_coding_document_agent_valid():
     assert meta.get("enable_mcp_tools") is True
 
     tools = meta.get("tools", [])
-    expected_tools = ["read_file", "write_file", "edit_file", "list_dir", "run_command", "ask_question", "send_message"]
+    expected_tools = ["read_file", "write_file", "list_dir", "run_command", "ask_question", "send_message"]
     for t in expected_tools:
         assert t in tools, f"Tool {t} must be declared in agent tools"
+    assert "edit_file" not in tools, "edit_file must not be declared on coding-document"
 
     aliases = meta.get("aliases", [])
     assert "coding-document" in aliases
@@ -161,5 +162,19 @@ def test_no_stale_companion_plugin_references():
     assert "agentic-topic-researching-plugin" in readme
     assert "agentic-task-monitoring-plugin" in readme
     assert "agentic-prompt-triage-plugin" in readme
+
+
+def test_coding_design_archival_documented():
+    skill_content = (PLUGIN_ROOT / "skills" / "coding-document" / "SKILL.md").read_text(encoding="utf-8")
+    assert "@coding-design" in skill_content
+    assert "design-spec.md" in skill_content
+    assert "agentic-obsidian/designs/" in skill_content
+    assert "agentic-obsidian/designs/index.md" in skill_content
+
+    rules_content = (PLUGIN_ROOT / "rules" / "AGENTS.md").read_text(encoding="utf-8")
+    assert "agentic-design-plugin" in rules_content
+    assert "@coding-design" in rules_content
+    assert "agentic-obsidian/designs/" in rules_content
+    assert "agentic-obsidian/designs/index.md" in rules_content
 
 
