@@ -24,7 +24,7 @@ The `coding-document` skill orchestrates documentation generation, synchronizati
 4. **Code Changes & Git Status Tracking**:
    - Documents branch states, commit history, dirty/clean status, and worktree allocations in `agentic-obsidian/git-status.md`.
 5. **Cross-Plugin Lifecycle Coordination**:
-   - Serves as the designated documentation worker for `@coding` (maintaining documentation after each phase), `@coding-investigate` (concluded issue assessments), `@coding-research` (creating/updating topics and subjects), and `@coding-monitor` (telemetry and session alerts).
+   - Serves as the designated documentation worker for `@coding` (maintaining documentation after each phase), `@coding-design` (approved UI/UX design specifications, PenPot links, and design tokens), `@coding-investigate` (concluded issue assessments), `@coding-research` (creating/updating topics and subjects), and `@coding-monitor` (telemetry and session alerts).
 
 ---
 
@@ -39,6 +39,7 @@ The `coding-document` skill orchestrates documentation generation, synchronizati
 6. **After Phase 6 (Merge / Post-Merge)**: Updates repository git statuses (`agentic-obsidian/git-status.md`), branch topologies, and release changelogs.
 
 ### Workflow B: Archiving Multi-Agent Deliverables
+- **From `@coding-design`**: Archives approved `design-spec.md`, PenPot project/file/frame links, component hierarchies, and extracted design tokens into `agentic-obsidian/designs/<design-slug>.md`, and updates `agentic-obsidian/designs/index.md`.
 - **From `@coding-investigate`**: Formats and stores root-cause analysis and approved `issue-assessment.md` into `agentic-obsidian/investigations/<issue-slug>.md`.
 - **From `@coding-research`**: Records approved research reports into `agentic-obsidian/research/`, creating a new topic/subject or updating an existing one, and updates `agentic-obsidian/research/index.md`.
 - **From `@coding-monitor`**: Documents telemetry metrics, observed streams, error alerts, and container surveillance logs into `agentic-obsidian/monitoring/<service-slug>.md`.
