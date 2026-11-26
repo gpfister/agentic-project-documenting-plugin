@@ -44,14 +44,17 @@ agents/
 2. **Architecture & ADRs**: Maintaining system architecture notes, Mermaid diagrams, interface contracts, and Architecture Decision Records under `agentic-obsidian/architecture/`.
 3. **Session & Artifact Archival**: Syncing Antigravity session transcripts and copying session artifacts from `<appDataDir>/brain/<conversation-id>/` into `agentic-obsidian/sessions/` and `agentic-obsidian/sessions/attachments/<session-id>/`.
 4. **Code Changes & Git Status Tracking**: Auditing git branches, unstaged diffs, commit histories, and worktrees across all workspace repositories, recording snapshots into `agentic-obsidian/git-status.md`.
+5. **Self-Managed Obsidian Worktree & PR Lifecycle**: Isolating all `*-obsidian/` documentation writes inside `<vault_root>/.worktrees/<slug>` on `docs/<slug>` while keeping `<vault_root>` on `<base>` (`main` or `master`), supporting multi-phase `defer_pr` accumulation (`@coding`) and single-shot release/cleanup (`gh pr create`, Hybrid PR Waiting Gate, Post-Merge Base Sync & Cleanup, Local-Only merge, or Non-Git Fallback), and relaying interactive prompts via Dual-Mode Question Relay (`[QUESTION_RELAY_REQUEST]` / `[QUESTION_RELAY_RESPONSE]`).
 
 ### 3.2 Inter-Plugin Collaboration Pipeline
 ```text
-@coding (after each phase)   ──> @coding-document (maintain specs, plans, progress, ADRs, git status)
-                                       │
-@coding-investigate (concluded) ──> @coding-document (archive investigation & root-cause analysis)
-                                       │
-@coding-research (concluded)    ──> @coding-document (record research report, create/update topic)
-                                       │
-@coding-monitor (concluded)     ──> @coding-document (record monitoring session, telemetry & alerts)
+@coding (Post-Plan / Pre-Merge: defer_pr=true; Post-Merge: defer_pr=false) ──> @coding-document
+                                                                                     │
+@coding-design (concluded, defer_pr=false)       ──> @coding-document (archive design-spec & tokens)
+                                                                                     │
+@coding-investigate (concluded, defer_pr=false)  ──> @coding-document (archive investigation & root cause)
+                                                                                     │
+@coding-research (concluded, defer_pr=false)     ──> @coding-document (record research report)
+                                                                                     │
+@coding-monitor (concluded, defer_pr=false)      ──> @coding-document (record monitoring telemetry & alerts)
 ```

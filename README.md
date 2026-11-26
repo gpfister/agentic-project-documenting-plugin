@@ -12,9 +12,12 @@ It introduces the autonomous subagent **`@coding-document`**, which can be invok
 - **Architecture & ADRs**: Formalize architecture decisions, diagrams, and cross-repo interfaces under `agentic-obsidian/architecture/`.
 - **Session & Artifact Preservation**: Automatically archive conversation transcripts and generated artifacts under `agentic-obsidian/sessions/` and `agentic-obsidian/sessions/attachments/<session-id>/`.
 - **Git State Tracking**: Track branches, commits, worktrees, and dirty/clean status in `agentic-obsidian/git-status.md`.
-- **Autonomous Subagent (`@coding-document`)**: Independent documentation specialist with full read, write, git inspection, and subagent messaging permissions.
+- **Self-Managed Obsidian Worktree & PR Lifecycle**: Isolates all `*-obsidian/` documentation writes in `<vault_root>/.worktrees/<slug>` on `docs/<slug>` while keeping `<vault_root>` on `<base>` (`main` or `master`). Supports multi-phase `defer_pr` accumulation for `@coding` (Post-Plan, Pre-Merge, Post-Merge) and single-shot Remote (`gh pr create`, Hybrid PR Waiting Gate, Post-Merge Base Sync & Cleanup), Local-Only, or Non-Git Fallback release strategies.
+- **Dual-Mode Question Relay**: Relays interactive prompts via `[QUESTION_RELAY_REQUEST]` / `[QUESTION_RELAY_RESPONSE]` in Subagent Mode (`caller_id` present) and uses `ask_question` directly in Standalone Mode.
+- **Autonomous Subagent (`@coding-document`)**: Independent documentation specialist with full read, write, scoped git worktree/PR, and subagent messaging permissions.
 - **Cross-Plugin Coordination**: Seamlessly integrated with:
-  - `agentic-coding-plugin`: Invoked after each phase to maintain specs, plans, test notes, and git status.
+  - `agentic-coding-plugin`: Invoked with consistent `slug` and `defer_pr=true` (Post-Plan, Pre-Merge) and `defer_pr=false` (Post-Merge) to accumulate and release documentation in a single PR.
+  - `agentic-design-plugin`: Invoked at the conclusion of UI/UX design to archive `design-spec.md`, PenPot links, and design tokens (`@coding-design`).
   - `agentic-issue-investigation-plugin`: Invoked at the conclusion of investigations to archive root-cause diagnoses (`@coding-investigate`).
   - `agentic-topic-researching-plugin`: Invoked at the conclusion of research to index reports and citations (`@coding-research`).
   - `agentic-task-monitoring-plugin`: Invoked at the conclusion of monitoring to record telemetry and alerts (`@coding-monitor`).
@@ -52,7 +55,7 @@ agentic-project-documenting-plugin/
 - `enable_write_tools: true`
 - `enable_subagent_tools: true`
 - `enable_mcp_tools: true`
-- Allowed Tools: `read_file`, `write_file`, `edit_file`, `list_dir`, `run_command`, `ask_question`, `send_message`
+- Allowed Tools: `read_file`, `write_file`, `list_dir`, `run_command`, `ask_question`, `send_message` (`edit_file` is strictly prohibited)
 
 ---
 

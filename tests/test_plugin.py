@@ -178,3 +178,75 @@ def test_coding_design_archival_documented():
     assert "agentic-obsidian/designs/index.md" in rules_content
 
 
+def test_obsidian_worktree_isolation_documented():
+    paths = [
+        PLUGIN_ROOT / "agents" / "coding-document" / "agent.md",
+        PLUGIN_ROOT / "skills" / "coding-document" / "SKILL.md",
+        PLUGIN_ROOT / "rules" / "AGENTS.md",
+    ]
+    for path in paths:
+        content = path.read_text(encoding="utf-8")
+        assert ".worktrees/<slug>" in content, f"Missing .worktrees/<slug> in {path}"
+        assert "docs/<slug>" in content, f"Missing docs/<slug> in {path}"
+        assert "<base>" in content, f"Missing primary repo base branch invariant in {path}"
+        assert ".worktrees/" in content, f"Missing .worktrees/ ignore rule in {path}"
+
+
+def test_defer_pr_and_multi_phase_accumulation_documented():
+    for rel_path in [
+        Path("agents/coding-document/agent.md"),
+        Path("skills/coding-document/SKILL.md"),
+        Path("rules/AGENTS.md"),
+        Path("agents/agent.md"),
+        Path("README.md"),
+    ]:
+        content = (PLUGIN_ROOT / rel_path).read_text(encoding="utf-8")
+        assert "defer_pr=true" in content, f"Missing defer_pr=true in {rel_path}"
+        assert "defer_pr=false" in content, f"Missing defer_pr=false in {rel_path}"
+
+    agent_content = (PLUGIN_ROOT / "agents" / "coding-document" / "agent.md").read_text(encoding="utf-8")
+    assert "Post-Plan" in agent_content
+    assert "Pre-Merge" in agent_content
+    assert "Post-Merge" in agent_content
+    assert "@coding-merge" in agent_content
+
+
+def test_release_strategies_and_hybrid_pr_gate_documented():
+    for rel_path in [
+        Path("agents/coding-document/agent.md"),
+        Path("skills/coding-document/SKILL.md"),
+        Path("rules/AGENTS.md"),
+    ]:
+        content = (PLUGIN_ROOT / rel_path).read_text(encoding="utf-8")
+        assert "gh pr create" in content, f"Missing gh pr create in {rel_path}"
+        assert "Hybrid PR Waiting Gate" in content, f"Missing Hybrid PR Waiting Gate in {rel_path}"
+        assert "Local-Only Release Strategy" in content, f"Missing Local-Only Release Strategy in {rel_path}"
+        assert "Non-Git Fallback" in content, f"Missing Non-Git Fallback in {rel_path}"
+
+    agent_content = (PLUGIN_ROOT / "agents" / "coding-document" / "agent.md").read_text(encoding="utf-8")
+    assert "gh pr view" in agent_content
+    assert "gh pr merge --auto --merge" in agent_content
+    assert "pull --ff-only" in agent_content
+    assert "worktree remove" in agent_content
+    assert "worktree prune" in agent_content
+    assert "rev-parse --is-inside-work-tree" in agent_content
+
+
+def test_question_relay_and_edit_file_prohibition_documented():
+    for rel_path in [
+        Path("agents/coding-document/agent.md"),
+        Path("skills/coding-document/SKILL.md"),
+        Path("rules/AGENTS.md"),
+        Path("agents/agent.md"),
+        Path("README.md"),
+    ]:
+        content = (PLUGIN_ROOT / rel_path).read_text(encoding="utf-8")
+        assert "[QUESTION_RELAY_REQUEST]" in content, f"Missing [QUESTION_RELAY_REQUEST] in {rel_path}"
+        assert "[QUESTION_RELAY_RESPONSE]" in content, f"Missing [QUESTION_RELAY_RESPONSE] in {rel_path}"
+
+    agent_content = (PLUGIN_ROOT / "agents" / "coding-document" / "agent.md").read_text(encoding="utf-8")
+    assert "edit_file" in agent_content and "prohibited" in agent_content.lower()
+    readme_content = (PLUGIN_ROOT / "README.md").read_text(encoding="utf-8")
+    assert "edit_file` is strictly prohibited" in readme_content
+
+
